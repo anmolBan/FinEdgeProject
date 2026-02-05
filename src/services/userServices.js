@@ -24,7 +24,7 @@ async function signinUser(data){
     if (!isPasswordValid) {
         throw new Error('Invalid password');
     }
-    return { user: user.toObject(), token };
+    return { token };
 }
 
 async function getUserById(id) {
