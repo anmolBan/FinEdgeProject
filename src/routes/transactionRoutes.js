@@ -7,6 +7,7 @@ const {
 	deleteTransactionController,
 	getSummaryController,
 } = require('../controllers/transactionController');
+const auth = require('../middleware/auth');
 const validate = require('../middleware/validator');
 const {
 	createTransactionSchema,
@@ -15,6 +16,9 @@ const {
 } = require('../validation/transactionValidation');
 
 const router = express.Router();
+
+// Protect all transaction routes with authentication
+router.use(auth);
 
 // POST /transactions - Add income/expense
 router.post('/', validate(createTransactionSchema, 'body'), createTransactionController);

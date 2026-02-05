@@ -13,6 +13,10 @@ const {
 async function createTransactionController(req, res, next) {
   try {
     const data = { ...req.body };
+    // Ensure the transaction is associated with the authenticated user
+    if (req.user && req.user.id) {
+      data.user = req.user.id;
+    }
     if (data.date) {
       data.date = new Date(data.date);
     }
@@ -25,7 +29,11 @@ async function createTransactionController(req, res, next) {
 
 async function getAllTransactionsController(req, res, next) {
   try {
-    const transactions = await getAllTransactions();
+  const filter = {};
+  if (req.user && req.user.id) {
+    filter.user = req.user.id;
+  }
+  const transactions = await getAllTransactions(filter);
     res.json(transactions);
   } catch (err) {
     next(err);
@@ -35,6 +43,7 @@ async function getAllTransactionsController(req, res, next) {
 async function getTransactionByIdController(req, res, next) {
   try {
     const { id } = req.params;
+    console.log("Fetching transaction with id:", id);
     const transaction = await getTransactionById(id);
     if (!transaction) {
         console.log("transaction not found for id:", id);
@@ -84,7 +93,11 @@ async function deleteTransactionController(req, res, next) {
 
 async function getSummaryController(req, res, next) {
   try {
-    const summary = await getSummary();
+  const filter = {};
+  if (req.user && req.user.id) {
+    filter.user = req.user.id;
+  }
+  const summary = await getSummary(filter);
     res.json(summary);
   } catch (err) {
     next(err);

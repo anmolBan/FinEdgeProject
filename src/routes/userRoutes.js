@@ -1,6 +1,6 @@
 const express = require('express');
 const userRouter = express.Router();
-const { createUserController, getUserByIdController, signinUserController } = require('../controllers/userController');
+const { createUserController, signinUserController } = require('../controllers/userController');
 
 userRouter.get('/', (req, res) => {
     res.send('User Home Page');
@@ -8,6 +8,5 @@ userRouter.get('/', (req, res) => {
 
 userRouter.post('/create', createUserController);
 userRouter.post('/signinUser', signinUserController);
-userRouter.get("/:id", getUserByIdController);
 module.exports = userRouter;
 
