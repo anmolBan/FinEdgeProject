@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
@@ -21,6 +22,7 @@ const apiLimiter = rateLimit({
 });
 
 app.use(apiLimiter);           // <-- add BEFORE your routes
+app.use(cors());               // Enable CORS for all origins by default
 app.use(express.json());
 
 // Custom logging middleware
