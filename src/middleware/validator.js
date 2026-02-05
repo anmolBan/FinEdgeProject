@@ -6,7 +6,8 @@ function validate(schema, source = 'body') {
       const data = { [source]: req[source], params: req.params, query: req.query };
       const result = schema.safeParse(data);
       if (!result.success) {
-        return res.status(400).json({ errors: result.error.errors });
+        // Forward validation errors to the global error handler
+        return next(result.error);
       }
       // overwrite with parsed data to ensure correct types
       if (result.data.body) req.body = result.data.body;

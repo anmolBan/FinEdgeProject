@@ -5,7 +5,10 @@ async function createUserController(req, res, next) {
   try {
     const parsed = createUserSchema.safeParse({ body: req.body });
     if (!parsed.success) {
-      return res.status(400).json({ errors: parsed.error.errors });
+      const error = new Error('Validation failed');
+      error.statusCode = 400;
+      error.details = parsed.error.errors;
+      return next(error);
     }
     const user = await createUser(parsed.data.body);
     res.status(201).json({
@@ -20,7 +23,10 @@ async function signinUserController(req, res, next) {
   try {
     const parsed = signinUserSchema.safeParse({ body: req.body });
     if (!parsed.success) {
-      return res.status(400).json({ errors: parsed.error.errors });
+      const error = new Error('Validation failed');
+      error.statusCode = 400;
+      error.details = parsed.error.errors;
+      return next(error);
     }
     const result = await signinUser(parsed.data.body);
     res.status(200).json(result);
@@ -33,10 +39,17 @@ async function getUserByIdController(req, res, next) {
   try {
     const parsed = getUserByIdSchema.safeParse({ params: req.params });
     if (!parsed.success) {
-      return res.status(400).json({ errors: parsed.error.errors });
+      const error = new Error('Validation failed');
+      error.statusCode = 400;
+      error.details = parsed.error.errors;
+      return next(error);
     }
     const user = await getUserById(parsed.data.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      const notFoundError = new Error('User not found');
+      notFoundError.statusCode = 404;
+      return next(notFoundError);
+    }
     res.json(user);
   } catch (err) {
     next(err);

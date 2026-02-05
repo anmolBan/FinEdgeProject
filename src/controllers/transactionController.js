@@ -37,7 +37,10 @@ async function getTransactionByIdController(req, res, next) {
     const { id } = req.params;
     const transaction = await getTransactionById(id);
     if (!transaction) {
-      return res.status(404).json({ message: 'Transaction not found' });
+        console.log("transaction not found for id:", id);
+        const error = new Error('Transaction not found');
+        error.statusCode = 404;
+        return next(error);
     }
     res.json(transaction);
   } catch (err) {
@@ -54,7 +57,9 @@ async function updateTransactionController(req, res, next) {
     }
     const transaction = await updateTransaction(id, updates);
     if (!transaction) {
-      return res.status(404).json({ message: 'Transaction not found' });
+      const error = new Error('Transaction not found');
+      error.statusCode = 404;
+      return next(error);
     }
     res.json(transaction);
   } catch (err) {
@@ -67,7 +72,9 @@ async function deleteTransactionController(req, res, next) {
     const { id } = req.params;
     const deleted = await deleteTransaction(id);
     if (!deleted) {
-      return res.status(404).json({ message: 'Transaction not found' });
+      const error = new Error('Transaction not found');
+      error.statusCode = 404;
+      return next(error);
     }
     res.status(204).send();
   } catch (err) {

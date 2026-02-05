@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const connectDB = require('./db/mongo');
@@ -10,6 +11,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// Global rate limiter: 100 requests per 15 minutes per IP
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(apiLimiter);           // <-- add BEFORE your routes
 app.use(express.json());
 
 // Custom logging middleware
