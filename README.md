@@ -210,11 +210,12 @@ The controller sets the `user` field to the authenticated user.
 - **logger** ([src/middleware/logger.js](src/middleware/logger.js))
   - Logs method, URL, status code, and response time for each request
 
+- **CORS**
+  - Enabled globally in [src/app.js](src/app.js) using the `cors` package
+  
 - **Rate limiting**
   - Configured in [src/app.js](src/app.js) using `express-rate-limit` (100 requests / 15 minutes per IP)
 
-- **CORS**
-  - Enabled globally in [src/app.js](src/app.js) using the `cors` package
 
 ---
 
