@@ -4,6 +4,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const budgetRoutes = require('./routes/budgetRoutes');
 const connectDB = require('./db/mongo');
 const requestLogger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
@@ -40,6 +41,9 @@ app.use('/users', userRoutes);
 
 // Transaction-related routes
 app.use('/transactions', transactionRoutes);
+
+// Budget-related routes
+app.use('/budgets', budgetRoutes);
 
 // Global error-handling middleware (should be last)
 app.use(errorHandler);
